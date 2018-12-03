@@ -1,0 +1,2 @@
+DAEMON_ARGS="-c /etc/sniproxy.conf"
+ENABLED=1

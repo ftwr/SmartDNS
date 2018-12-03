@@ -1,0 +1,21 @@
+acl goodclients {
+any;
+localhost;
+127.0.0.1;
+localnets;
+};
+options {
+directory "/var/cache/bind";
+dnssec-validation yes;
+dnssec-enable yes;
+dnssec-lookaside auto;
+allow-query {goodclients;};
+auth-nxdomain no;
+listen-on {any;};
+
+forwarders {
+8.8.8.8;
+8.8.4.4;
+};
+forward only;
+};

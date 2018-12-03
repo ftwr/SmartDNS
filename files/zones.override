@@ -1,0 +1,5 @@
+zone "ip2location.com." {type master;file "/etc/bind/db.override";};
+zone "hulu.com." {type master;file "/etc/bind/db.override";};
+zone "netflix.com." {type master;file "/etc/bind/db.override";};
+#zone "." {type master;file "/etc/bind/db.override";};
+#the above line is to traffic everything / all websites through sniproxy.

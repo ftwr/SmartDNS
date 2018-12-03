@@ -1,0 +1,6 @@
+sniproxy: "http://github.com/dlundquist/sniproxy.git"
+named_conf_local: "/etc/bind/named.conf.local"
+named_conf_options: "/etc/bind/named.conf.options"
+zones_override: "/etc/bind/zones.override"
+named_conf: "/etc/bind/named.conf"
+default_snip: "/etc/default/sniproxy"

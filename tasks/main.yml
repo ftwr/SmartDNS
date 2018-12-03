@@ -1,0 +1,131 @@
+---
+
+ - name: Installing bind9 & others packages/dependencies
+   become: yes
+   apt:
+     name: "{{ item }}"
+     update_cache: yes
+   with_items:
+    - git
+    - apt-utils
+    - curl
+    - build-essential
+    - wget
+    - gcc
+    - nano
+    - mc
+    - unzip
+    - ca-certificates
+    - bind9
+    - autotools-dev
+    - cdbs
+    - debhelper
+    - dh-autoreconf
+    - dpkg-dev
+    - gettext
+    - libev-dev
+    - libpcre3-dev
+    - libudns-dev
+    - pkg-config
+    - fakeroot
+    - devscripts
+
+ - name: Copy "named.conf.local"
+   become: yes
+   copy: 
+     src: named.conf.local
+     dest: "{{ named_conf_local }}"
+     #owner: root
+     #group: root
+     #mode: 0644
+      
+ - name: Copy "named.conf.options"
+   become: yes
+   copy: 
+     src: named.conf.options
+     dest: "{{ named_conf_options }}"
+     #owner: root
+     #group: root
+     #mode: 0644
+     
+     
+# - name: update-rc.d bind9 defaults
+#   become: yes
+#   command: update-rc.d bind9 defaults
+   
+ - name: Copy "zones.override file"
+   become: yes
+   copy: 
+     src: zones.override
+     dest: "{{ zones_override }}"
+     #owner: root
+     #group: root
+     #mode: 0644
+
+ - name: copy "db.override"
+   become: yes
+   template:
+     src: db.override.j2
+     dest: /etc/bind/db.override
+
+ - name: Copy "named.conf"
+   become: yes
+   copy: 
+     src: named.conf
+     dest: "{{ named_conf }}"
+     #owner: root
+     #group: root
+     #mode: 0644
+
+
+ - name: cloning sniproxy
+   become: yes
+   git:
+     repo: "{{ sniproxy }}"
+     dest: /opt/sniproxy
+     clone: yes
+
+ - name: dpkg-buildpackage
+   become: yes
+   command: dpkg-buildpackage
+   args:
+     chdir: /opt/sniproxy
+
+ - name: install sniproxy *.deb package
+   become: yes
+   shell: dpkg -i sniproxy*.deb
+   args:
+     chdir: /opt
+
+ - name: Copy "default snip"
+   become: yes
+   copy: 
+     src: sniproxy
+     dest: "{{ default_snip }}"
+     #owner: root
+     #group: root
+     #mode: 0644
+
+ - name: Copy "snip config file"
+   become: yes
+   template:
+     src: sniproxy.conf.j2
+     dest: /etc/sniproxy.conf
+
+# - name: update-rc.d sniproxy defaults
+#   become: yes
+#   command: update-rc.d sniproxy defaults
+
+ - name: Restart service bind9, in all cases
+   become: yes
+   service:
+     name: bind9
+     state: restarted
+     enabled: yes
+  
+ - name: Restart service sniproxy, in all cases
+   become: yes
+   service:
+     name: sniproxy
+     state: restarted
+     enabled: yes

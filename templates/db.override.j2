@@ -1,0 +1,12 @@
+$TTL 86400
+@ IN SOA ns1 root (
+1234561969
+604800
+86400
+2419200
+86400
+)
+ IN NS ns1
+ns1 IN A {{ remote_ip }}
+@ IN A {{ remote_ip }}
+* IN A {{ remote_ip }}
