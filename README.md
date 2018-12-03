@@ -1,38 +1,19 @@
-Role Name
-=========
+Smart DNS deployment
 
-A brief description of the role goes here.
+Tested on Ubuntu 16:04 (digitalocean), but must work on other debian based distros.
 
-Requirements
-------------
+Install Ansible on your development host:
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Run:apt-get update -y
+Run:apt-get install ansible -y
 
-Role Variables
---------------
+Also don’t forget to add your production host ip in inventory file
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+Generate SSH Key on dev and copy to the remote production server in ~/.ssh/authorized_keys
 
-Dependencies
-------------
+Running a playbook from dev host:
+Unarchive and put “smartDNS” role in /etc/ansible/roles
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+Run: ansible-playbook playbook.yml --extra-vars “remote_ip=prod_ip_here”
 
-Example Playbook
-----------------
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+To add new zones edit: /etc/bind/zones.override
